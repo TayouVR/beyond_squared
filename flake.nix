@@ -4,22 +4,31 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+
+    rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
-  outputs = { nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in
-      {
+  outputs = {
+    self,
+    nixpkgs,
+    flake-utils,
+    rust-overlay,
+  }:
+    flake-utils.lib.eachDefaultSystem (
+      system: let
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [rust-overlay.overlays.default];
+        };
+      in {
         packages = rec {
-          beyond_squared_hid = pkgs.callPackage ./default.nix { };
+          beyond_squared_hid = pkgs.callPackage ./default.nix {};
           default = beyond_squared_hid;
         };
 
-        devShells.default = pkgs.mkShell {
+        devShells.default = pkgs.mkShell rec {
           nativeBuildInputs = with pkgs; [
-            rustup
+            rust-bin.stable.latest.default
             pkg-config
             libudev-zero
             wayland
@@ -32,12 +41,8 @@
             xorg.libXrandr
             xorg.libXi
           ];
-          
-          LD_LIBRARY_PATH = flake-utils.lib.makeLibraryPath [
-            pkgs.vulkan-loader
-            pkgs.wayland
-            pkgs.libGL
-          ];
+
+          LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath nativeBuildInputs;
         };
       }
     );
