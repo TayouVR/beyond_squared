@@ -1,15 +1,15 @@
-{ lib
-, rustPlatform
-, pkg-config
-, libudev-zero
-, wayland
-, libxkbcommon
-, wayland-protocols
-, libGL
-, vulkan-loader
-, xorg
+{
+  lib,
+  rustPlatform,
+  pkg-config,
+  libudev-zero,
+  wayland,
+  libxkbcommon,
+  wayland-protocols,
+  libGL,
+  vulkan-loader,
+  xorg,
 }:
-
 rustPlatform.buildRustPackage {
   pname = "beyond_squared_hid";
   version = "0.1.0";
@@ -37,12 +37,10 @@ rustPlatform.buildRustPackage {
     xorg.libXi
   ];
 
-  # Make sure the application can find the Vulkan loader
-  LD_LIBRARY_PATH = lib.makeLibraryPath [
-    vulkan-loader
-    wayland
-    libGL
-  ];
+  postFixup = ''
+    patchelf --add-rpath ${vulkan-loader}/lib $out/bin/*
+    patchelf --add-rpath ${libxkbcommon}/lib $out/bin/*
+  '';
 
   # Install udev rules
   postInstall = ''
@@ -54,6 +52,6 @@ rustPlatform.buildRustPackage {
     description = "HID interface for Beyond Squared";
     homepage = "https://github.com/yourusername/beyond_squared";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [];
   };
 }
