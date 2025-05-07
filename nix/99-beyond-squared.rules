@@ -1,0 +1,1 @@
+KERNEL=="hidraw*", ATTRS{idVendor}=="35BD", ATTRS{idProduct}=="0101", MODE="0666"
