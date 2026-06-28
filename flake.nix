@@ -33,13 +33,7 @@
             libudev-zero
             wayland
             libxkbcommon
-            wayland-protocols
             libGL
-            vulkan-loader
-            xorg.libX11
-            xorg.libXcursor
-            xorg.libXrandr
-            xorg.libXi
           ];
 
           LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath nativeBuildInputs;

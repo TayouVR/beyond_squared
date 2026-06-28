@@ -8,7 +8,6 @@
   wayland-protocols,
   libGL,
   vulkan-loader,
-  xorg,
 }:
 rustPlatform.buildRustPackage {
   pname = "beyond_squared_hid";
@@ -31,10 +30,6 @@ rustPlatform.buildRustPackage {
     libxkbcommon
     libGL
     vulkan-loader
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXi
   ];
 
   postFixup = ''
