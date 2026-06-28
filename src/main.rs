@@ -26,7 +26,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         viewport: egui::ViewportBuilder::default().with_inner_size([640.0, 480.0]),
         ..Default::default()
     };
-    eframe::run_native("Beyond^2", options, Box::new(|cc| { Box::new(MyApp::new(device)) }))?;
+    eframe::run_native("Beyond²", options, Box::new(|_cc| { Box::new(MyApp::new(device)) }))?;
     Ok(())
 }
 
@@ -49,7 +49,7 @@ impl Default for MyApp {
 }
 
 impl App for MyApp {
-    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
+    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         let current_fan_speed = self.fan_speed;
         let current_brightness = self.brightness;
         egui::CentralPanel::default().show(ctx, |ui|{
